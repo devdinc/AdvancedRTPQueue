@@ -1,0 +1,79 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.0'
+}
+
+group = 'com.kingrbxd'
+version = '3.1'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        name = 'glaremasters-repo'
+        url = 'https://repo.glaremasters.me/repository/towny/'
+    }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+    }
+    maven {
+        name = 'placeholderapi'
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+}
+
+dependencies {
+    // Paper API
+    compileOnly 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
+
+    // bStats (shaded + relocated)
+    implementation 'org.bstats:bstats-bukkit:3.0.2'
+
+    // GriefPrevention
+    compileOnly 'com.github.GriefPrevention:GriefPrevention:16.18.2'
+
+    // Towny
+    compileOnly 'com.palmergames.bukkit.towny:towny:0.101.2.0'
+
+    // SaberFactions (local system dependency equivalent)
+    compileOnly files('libs/SaberFactions.jar')
+
+    // PlaceholderAPI
+    compileOnly 'me.clip:placeholderapi:2.11.7'
+
+    // PaperLib
+    implementation 'io.papermc:paperlib:1.0.8'
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+    inputs.property 'version', project.version
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveClassifier.set('')
+    relocate 'org.bstats', 'com.kingrbxd.bstats'
+}
+
+tasks.build {
+    dependsOn tasks.shadowJar
+}

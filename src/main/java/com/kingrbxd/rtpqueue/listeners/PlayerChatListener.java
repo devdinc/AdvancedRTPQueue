@@ -1,10 +1,12 @@
 package com.kingrbxd.rtpqueue.listeners;
 
 import com.kingrbxd.rtpqueue.AdvancedRTPQueue;
+
+import io.papermc.paper.event.player.AsyncChatEvent;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * Complete player chat listener
@@ -17,7 +19,7 @@ public class PlayerChatListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerChat(AsyncChatEvent event) {
         if (!plugin.getConfigManager().getBoolean("teleport.cancel-on-chat", false)) {
             return;
         }
